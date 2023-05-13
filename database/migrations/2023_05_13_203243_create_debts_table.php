@@ -13,13 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('debts', function (Blueprint $table) {
             $table->id();
-            $table->string('fullName');
-            $table->string('username')->unique();
-            $table->string('password');
-            $table->string('api_key')->unique();
+            $table->integer('amount');
+            $table->boolean('is_paid')->default(false);
             $table->boolean('is_active')->default(true);
+            $table->unsignedBigInteger('debtor_id');
+            $table->foreign('debtor_id')
+                ->references('id')
+                ->on('debtors')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -31,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('debts');
     }
 };

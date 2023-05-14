@@ -19,3 +19,6 @@ Route::get('/', function () {
 });
 
 Route::get('/test', [TestingController::class, 'test']);
+Route::get('/api/documentation', function () {
+    return view('vendor/l5-swagger/index');
+});

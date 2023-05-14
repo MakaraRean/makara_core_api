@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::GET('/debtor/get', [DebtorController::class, 'get_debtors']);
 Route::POST('/debtor/add', [DebtorController::class, 'add_debtor']);
+Route::PUT('/debtor/update', [DebtorController::class, 'update']);

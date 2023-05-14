@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Logic\BaseLogic;
+use App\Logic\CustomHttpResponse;
 use App\Models\Debtor;
 use Faker\Provider\Base;
 use Illuminate\Http\Request;
@@ -46,11 +47,21 @@ class DebtorController extends Controller
         $debtor->address = $address;
         $saved = $debtor->save();
         if (!$saved)
-            return BaseLogic::base_response(message: "Debtor {$name} was not add, there are went wrong!", status: 422);
+            return CustomHttpResponse::save_unsuccess($debtor);
         return BaseLogic::base_response(message: "Debtor create successfully.", content: $request->json()->all(), status: 201);
     }
 
     public function update(Request $request){
-
+        $debtor = Debtor::find($request->id);
+        if (!$debtor){
+            return CustomHttpResponse::not_found();
+        }
+        $debtor->name = $request->name;
+        $debtor->sex = $request->sex;
+        $debtor->address = $request->address;
+        $saved = $debtor->save();
+        if (!$saved)
+            return CustomHttpResponse::update_unsuccess($debtor);
+        return BaseLogic::base_response("Data was updated.", $debtor);
     }
 }

@@ -5,30 +5,28 @@ namespace App\Http\Controllers;
 use App\Logic\BaseLogic;
 use App\Logic\CustomHttpResponse;
 use App\Models\Debtor;
-use Faker\Provider\Base;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DebtorController extends Controller
 {
     public function get_debtors(Request $request){
-        if ($request->hasAny(['name', 'sex', 'address'])){
             $name = $request->input('name');
             $sex = $request->input('sex');
             $address = $request->input('address');
-            $debtors = DB::table('debtors');
-            if ($name)
-                $debtors->where('name','LIKE', "%{$name}%");
-            if ($sex)
-                $debtors->where('sex','LIKE', "%{$sex}%");
-            if ($address)
-                $debtors->where('address','LIKE', "%{$address}%");
-            $debtors = $debtors->where('is_active', '=', true)->get();
-        }
-        else{
-            $debtors = Debtor::all();
-            //$debtors = DB::table('debtors')->where('is_active', '=', true)->limit(10)->get();
-        }
+            $debtors = DB::table('debtors')->where("is_active", true);
+            if ($name) {
+                $debtors->where('name', 'LIKE', "%{$name}%");
+            }
+            if ($sex) {
+                $debtors->where('sex', '=', $sex);
+            }
+
+            if ($address) {
+                $debtors->where('address', 'LIKE', "%{$address}%");
+            }
+            $debtors = $debtors->get();
 
         if ($debtors->count() == 0){
             return BaseLogic::base_response("Debtor was not found!", status: 404);
@@ -54,14 +52,20 @@ class DebtorController extends Controller
     public function update(Request $request){
         $debtor = Debtor::find($request->id);
         if (!$debtor){
-            return CustomHttpResponse::not_found();
+            return CustomHttpResponse::notFoundResponse("Not found debtor with id {$request->id}!");
         }
-        $debtor->name = $request->name;
-        $debtor->sex = $request->sex;
-        $debtor->address = $request->address;
-        $saved = $debtor->save();
-        if (!$saved)
-            return CustomHttpResponse::update_unsuccess($debtor);
-        return BaseLogic::base_response("Data was updated.", $debtor);
+        try {
+            $debtor->name = $request->name;
+            $debtor->sex = $request->sex;
+            $debtor->address = $request->address;
+            $saved = $debtor->save();
+            if (!$saved)
+                return CustomHttpResponse::update_unsuccess($debtor);
+
+        }
+        catch (Exception $exception){
+            return CustomHttpResponse::update_unsuccess($exception);
+        }
+        return CustomHttpResponse::data_updated($debtor);
     }
 }

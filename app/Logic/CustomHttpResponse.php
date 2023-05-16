@@ -3,14 +3,10 @@
 namespace App\Logic;
 
 use App\Interfaces\ICustomHttpResponse;
+use Faker\Provider\Base;
 
 class CustomHttpResponse implements ICustomHttpResponse
 {
-    public static function not_found()
-    {
-        return BaseLogic::base_response("Data not found!", status: 404);
-    }
-
     public static function save_unsuccess($data)
     {
         return BaseLogic::base_response("Data save unsuccessfully! please check data entry.", $data, 422);
@@ -36,8 +32,13 @@ class CustomHttpResponse implements ICustomHttpResponse
         return BaseLogic::base_response($message, status: $status);
     }
 
-    public static function notFoundResponse($message)
+    public static function notFoundResponse($message = 'Data not found! please check your data.')
     {
         return BaseLogic::base_response($message, status: 404);
+    }
+
+    public static function getResponse($message, $totalRecords)
+    {
+        return BaseLogic::get_response($message, $totalRecords);
     }
 }

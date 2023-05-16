@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Debt extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'debtor_id',
+        'amount',
+        ];
     public function debtor(){
         return $this->belongsTo("App\Models\Debtor");
     }

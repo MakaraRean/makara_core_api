@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DebtController;
 use App\Http\Controllers\DebtorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,3 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::GET('/debtor/get', [DebtorController::class, 'get_debtors']);
 Route::POST('/debtor/add', [DebtorController::class, 'add_debtor']);
 Route::PUT('/debtor/update', [DebtorController::class, 'update']);
+
+Route::GET('/debt/get', [DebtController::class, 'get']);
+Route::POST('/debt/add', [DebtController::class, 'add']);
+Route::PUT('/debt/update', [DebtController::class, 'update']);
+Route::PUT('/debt/pay', [DebtController::class, 'pay']);

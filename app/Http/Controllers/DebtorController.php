@@ -12,23 +12,21 @@ use Illuminate\Support\Facades\DB;
 class DebtorController extends Controller
 {
     public function get_debtors(Request $request){
-            $name = $request->input('name');
-            $sex = $request->input('sex');
-            $address = $request->input('address');
-            $debtors = DB::table('debtors')->where("is_active", true);
-            if ($name) {
-                $debtors->where('name', 'LIKE', "%{$name}%");
-            }
-            if ($sex) {
-                $debtors->where('sex', '=', $sex);
-            }
-
-            if ($address) {
-                $debtors->where('address', 'LIKE', "%{$address}%");
-            }
-            $debtors = $debtors->get();
-
-        if ($debtors->count() == 0){
+//            $debtors = DB::table('debtors')->where("is_active", true);
+//            if ($name) {
+//                $debtors->where('name', 'LIKE', "%{$name}%");
+//            }
+//            if ($sex) {
+//                $debtors->where('sex', '=', $sex);
+//            }
+//
+//            if ($address) {
+//                $debtors->where('address', 'LIKE', "%{$address}%");
+//            }
+//            $debtors = $debtors->get();
+        $filters = $request->only(['id', 'name', 'sex', 'address', 'd1', 'd2']);
+        $debtors = BaseLogic::search('debtors', $filters);
+        if ($debtors->isEmpty()){
             return BaseLogic::base_response("Debtor was not found!", status: 404);
         }
         return BaseLogic::get_response($debtors, $debtors->count());

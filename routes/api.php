@@ -22,8 +22,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::GET('/debtor/get', [DebtorController::class, 'get_debtors']);
 Route::POST('/debtor/add', [DebtorController::class, 'add_debtor']);
 Route::PUT('/debtor/update', [DebtorController::class, 'update']);
+Route::PUT('/debtor/pay', [DebtorController::class, 'pay']);
 
 Route::GET('/debt/get', [DebtController::class, 'get']);
+Route::GET('/debt/getByDebtor/{id}', [DebtController::class, 'getByDebtor']);
 Route::POST('/debt/add', [DebtController::class, 'add']);
 Route::PUT('/debt/update', [DebtController::class, 'update']);
 Route::PUT('/debt/pay', [DebtController::class, 'pay']);

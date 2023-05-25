@@ -22,6 +22,10 @@ class CustomHttpResponse implements ICustomHttpResponse
         return BaseLogic::base_response("Data was updated.", $data);
     }
 
+    public static function custom_response($message, $data, $status){
+        return BaseLogic::base_response($message, $data, $status);
+    }
+
     public static function successResponse($data, $message, $status = 200)
     {
         return BaseLogic::base_response($message, $data, $status);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Logic\BaseLogic;
 use App\Logic\CustomHttpResponse;
+use App\Models\Debt;
 use App\Models\Debtor;
 use Exception;
 use Illuminate\Http\Request;
@@ -65,5 +66,26 @@ class DebtorController extends Controller
             return CustomHttpResponse::update_unsuccess($exception);
         }
         return CustomHttpResponse::data_updated($debtor);
+    }
+
+    public function pay(Request $request){
+        $debtor = Debtor::find($request->id);
+        if (!$debtor){
+            return CustomHttpResponse::notFoundResponse("Not found debtor with id {$request->id}!");
+        }
+        $debts = Debt::where('debtor_id', $request->id)->where('is_paid', false)->get();
+        if ($debts->isEmpty()){
+            return CustomHttpResponse::notFoundResponse("Debtor has no debt!");
+        }
+        try {
+            $debts->each(function ($debt) {
+                $debt->is_paid = true;
+                $debt->save();
+            });
+            return CustomHttpResponse::custom_response("Debt was paid successfully!", data: $debts, status: 200);
+        }
+        catch (Exception $exception){
+            return CustomHttpResponse::custom_response("Debt was not paid!",$exception, status: 400);
+        }
     }
 }

@@ -7,16 +7,46 @@ use App\Logic\CustomHttpResponse;
 use App\Models\Debt;
 use App\Models\Debtor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DebtController extends Controller
 {
     public function get(Request $request){
-        $params = $request->only(['id', 'd1', 'd2', 'is_paid']);
+        $params = $request->only(['id', 'd1', 'd2', 'is_paid', 'debtor_id']);
         $debts = BaseLogic::search('debts', $params);
+
+        $debtorIds = $debts->pluck('debtor_id')->toArray();
+        $debtors = Debtor::whereIn('id', $debtorIds)->get()->keyBy('id');
+        $debtsRes = $debts->map(function ($debt) use ($debtors) {
+            return [
+                'amount' => $debt->amount,
+                'is_paid' => $debt->is_paid,
+                'debtor' => $debtors->get($debt->debtor_id),
+            ];
+        });
+//        foreach ($debts as $debt){
+//            $debtModel->amount = $debt->amount;
+//            $debtModel->is_paid = $debt->is_paid;
+//            $debtModel->debtor =  Debtor::find($debt->debtor_id);
+//            $debtsRes[] = $debtModel;
+//        }
         if ($debts->isEmpty()){
             return CustomHttpResponse::notFoundResponse();
         }
-        return CustomHttpResponse::getResponse($debts, $debts->count());
+        return CustomHttpResponse::getResponse($debtsRes, $debts->count());
+    }
+
+
+    public function getByDebtor($id){
+        $debtor = DB::table('debts')->select('debtor_id', DB::raw('SUM(amount) as total_amount'))
+            ->groupBy('debtor_id')
+            ->where('debtor_id', $id)->first();
+        $debtor->debtor = Debtor::find($id);
+
+        //$debtorResponse = new Debtor;
+        $debtorResponse = $debtor->debtor;
+        $debtorResponse->total_amount = $debtor->total_amount;
+        return $debtorResponse;
     }
 
     public function add(Request $request){

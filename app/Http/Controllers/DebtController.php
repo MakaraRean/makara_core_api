@@ -42,8 +42,7 @@ class DebtController extends Controller
             ->groupBy('debtor_id')
             ->where('debtor_id', $id)->first();
         if (!$debtor){
-            $d = Debtor::find($id);
-            return CustomHttpResponse::notFoundResponse("Debtor {$d->name} not found!");
+            return CustomHttpResponse::notFoundResponse("Debtor {$id} not found!");
         }
         $debtor->debtor = Debtor::find($id);
 

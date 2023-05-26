@@ -39,7 +39,7 @@
                 ->when($filters,
                     function ($query) use ($filters, $keys){
                         foreach (array_combine($filters, $keys) as $filter=>$key){
-                            if ($key == 'sex'  || $key == 'is_paid' || $key == 'debtor_id')
+                            if ($key == 'sex'  || $key == 'is_paid' || $key == 'debtor_id' || $key == 'id')
                                 $query->where($key, "=", $filter);
                             elseif ($key == 'd1' || $key == 'd2') {
                                 continue;

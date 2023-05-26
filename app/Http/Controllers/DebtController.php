@@ -19,6 +19,7 @@ class DebtController extends Controller
         $debtors = Debtor::whereIn('id', $debtorIds)->get()->keyBy('id');
         $debtsRes = $debts->map(function ($debt) use ($debtors) {
             return [
+                'id' => $debt->id,
                 'amount' => $debt->amount,
                 'is_paid' => $debt->is_paid,
                 'debtor' => $debtors->get($debt->debtor_id),

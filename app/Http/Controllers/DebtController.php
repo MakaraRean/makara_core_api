@@ -41,7 +41,7 @@ class DebtController extends Controller
     public function getByDebtor($id){
         $debtor = DB::table('debts')->select('debtor_id', DB::raw('SUM(amount) as total_amount, COUNT(debtor_id) as debt_count'))
             ->groupBy('debtor_id')
-            ->where('debtor_id', $id)->where('is_active', true)->first();
+            ->where('debtor_id', $id)->where('is_paid', false)->first();
         if (!$debtor){
             return CustomHttpResponse::notFoundResponse("Debtor {$id} not found!");
         }

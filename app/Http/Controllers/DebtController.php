@@ -22,6 +22,7 @@ class DebtController extends Controller
                 'id' => $debt->id,
                 'amount' => $debt->amount,
                 'is_paid' => $debt->is_paid,
+                'note' => $debt->note,
                 'debtor' => $debtors->get($debt->debtor_id),
             ];
         });
@@ -62,6 +63,7 @@ class DebtController extends Controller
         }
         $debt->debtor_id = $request->debtor_id;
         $debt->amount = $request->amount;
+        $debt->note = $request->note;
         $saved = $debt->save();
         if (!$saved){
             return CustomHttpResponse::save_unsuccess($debt);

@@ -10,6 +10,7 @@ class Debt extends Model
     protected $fillable = [
         'debtor_id',
         'amount',
+        'note',
         ];
     public function debtor(){
         return $this->belongsTo("App\Models\Debtor");

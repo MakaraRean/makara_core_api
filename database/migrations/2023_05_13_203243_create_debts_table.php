@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('amount');
             $table->boolean('is_paid')->default(false);
             $table->boolean('is_active')->default(true);
+            $table->string('note',1000)->nullable();
             $table->unsignedBigInteger('debtor_id');
             $table->foreign('debtor_id')
                 ->references('id')

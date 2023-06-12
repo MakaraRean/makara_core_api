@@ -23,6 +23,8 @@ class DebtController extends Controller
                 'amount' => $debt->amount,
                 'is_paid' => $debt->is_paid,
                 'note' => $debt->note,
+                'created_at' => $debt->created_at,
+                'updated_at' => $debt->updated_at,
                 'debtor' => $debtors->get($debt->debtor_id),
             ];
         });

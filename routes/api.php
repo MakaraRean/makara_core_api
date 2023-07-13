@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\DebtController;
 use App\Http\Controllers\DebtorController;
 use Illuminate\Http\Request;
@@ -29,3 +30,5 @@ Route::GET('/debt/getByDebtor/{id}', [DebtController::class, 'getByDebtor']);
 Route::POST('/debt/add', [DebtController::class, 'add']);
 Route::PUT('/debt/update', [DebtController::class, 'update']);
 Route::PUT('/debt/pay', [DebtController::class, 'pay']);
+
+Route::get('viewer/add', [Controller::class, 'addVisiter']);

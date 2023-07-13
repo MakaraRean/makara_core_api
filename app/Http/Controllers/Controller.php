@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Logic\CustomHttpResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -19,5 +20,10 @@ class Controller extends BaseController
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+    }
+
+    public function getVisiter() {
+        $count = DB::table('viewer')->count();
+        return CustomHttpResponse::custom_response("Count Visiter", $count, 200);
     }
 }

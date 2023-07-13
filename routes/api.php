@@ -32,3 +32,4 @@ Route::PUT('/debt/update', [DebtController::class, 'update']);
 Route::PUT('/debt/pay', [DebtController::class, 'pay']);
 
 Route::get('viewer/add', [Controller::class, 'addVisiter']);
+Route::get('viewer/add', [Controller::class, 'getVisiter']);
